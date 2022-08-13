@@ -27,10 +27,10 @@ app.get("/", function(req, res) {
 
 app.get("/articles", function(req, res) {
   Article.find({}, function(err, foundArticles) {
-    if (err) {
-      res.send(err);
-    } else {
+    if (!err) {
       res.send(foundArticles);
+    } else {
+      res.send(err);
     }
   });
 });
@@ -43,17 +43,21 @@ app.post("/articles", function(req, res) {
 
   article.save(function(err) {
     if (!err) {
-      res.redirect("/articles");
+      // res.redirect("/articles");
       res.send("Successfully added new article.");
     } else {
       res.send(err);
     }
   });
-  // console.log(req.body.title);
-  // console.log(req.body.content);
 });
 
-
+app.delete("/articles", function(req, res) {
+  Article.deleteMany(function(err) {
+    if (!err) {
+      res.send("Successfully deleted all articles.");
+    }
+  });
+});
 
 
 
