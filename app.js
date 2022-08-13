@@ -7,10 +7,11 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));
 
 main().catch(err => console.log(err));
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/wikiDb");
+  await mongoose.connect("mongodb://localhost:27017/wikiDB");
 }
 
 const articleSchema = new mongoose.Schema({
@@ -24,7 +25,15 @@ app.get("/", function(req, res) {
   res.send("<h1>Hello everyone!</h1>");
 });
 
-
+app.get("/articles", function(req, res) {
+  Article.find({}, function(err, foundArticles) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(foundArticles);
+    }
+  });
+});
 
 
 
